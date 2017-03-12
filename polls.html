@@ -1,0 +1,74 @@
+<script type="text/javascript" src="http://www.smspoll.net/js/swfobject.js"></script>
+<script type="text/javascript" src="http://www.smspoll.net/js/embedsmspoll.js"></script>
+
+<div id="SMSPollChart">
+  <p> Loading Polls </p>
+</div>
+<h1 id="demo"></h1>
+<script type="text/javascript">
+var i = 0;
+
+var links = [ 
+  "34588Bl4IJ3hxycVYu6a.swf",
+  "34521EP5TrkMWF4810he.swf",
+  "34522vp2xf5RIZw01Eir.swf",
+  "34523aLqDi74ujf3VU0s.swf",
+  "34525946Vm35bK3x0t6W.swf",
+  "34526mT34DenXAxv536J.swf", // Hamlet or Hamilton
+  "34589DVfc73Sc67vK9hn.swf", // Batman
+  "34590qdbRPPyVHAko97Q.swf", //Aquaman or the flash?
+  "345916Ya8GA4EPrPyLKK.swf", //Intel or AMD?
+  "34592htX8KUhIh5a31EO.swf", //Morison
+  "345939bQ5ezVgvYeuMqZ.swf", //Oatmeal or Grits
+  "3459455V6zm3MGaFl1mo.swf", //Tissue or Toilet Paper
+  "34595Zu9YBx40v3S973v.swf", //Middleman or Midwife
+  "34596cfq3908BkhmXzGX.swf", //Kahn or Porter
+  "34597i4HpjSDcSygSK1N.swf", //Gladwell or Gladstone
+  "34598HK1DxQ5DMz8hOkb.swf", //Bi Sheng or Gutenberg
+  "34599Dq4PvwRkdjN975J.swf", //Wolff or woolf
+  "34600CH3UdSsBDJnf79n.swf", //Carmelites or Little Carmels
+  "34601fQY3WOHZqdOx6Xk.swf", //Glass Wear or Evening Wear
+  "34602thedoR2o217iW8J.swf", //Matt Damon or Damon Bruce
+]
+
+for (j=0; j<links.length; j+= 1) {
+  links[j] = "http://www.smspoll.net/polls/charts/us_" + links[j]
+  console.log(links[j])
+}
+
+function changePoll() {
+  if (i < links.length) {
+    countDownDate = new Date().getTime() + 31000
+    swfobject.embedSWF(links[i], "SMSPollChart", "820", "450", "9.0.115",
+      expressinstall, flashvars, params, attributes);
+    document.getElementById("SMSPollChart").style.visibility= "hidden";
+    i += 1;
+    setTimeout(changePoll, 1000 * 30);
+    setTimeout(function (){
+      document.getElementById("SMSPollChart").style.visibility = "visible"; }, 1300);
+  }
+}
+
+changePoll();
+// Set the date we're counting down to
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get todays date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now an the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id="demo"
+  document.getElementById("demo").innerHTML = seconds + " seconds left";
+
+  // If the count down is finished, write some text 
+  if (distance < 0) {
+    document.getElementById("demo").innerHTML = "";
+  }
+}, 100);
+</script>
