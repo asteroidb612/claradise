@@ -1,17 +1,27 @@
-<script type="text/javascript" src="http://www.smspoll.net/js/swfobject.js"></script>
-<script type="text/javascript" src="http://www.smspoll.net/js/embedsmspoll.js"></script>
-<button id="begin" onclick="beginPolling()"> Begin Polling </button>
-
-<h1 id="countdown"></h1>
-<script type="text/javascript">
+<html>
+  <head>
+    <script type="text/javascript" src="http://www.smspoll.net/js/swfobject.js"></script>
+    <script type="text/javascript" src="http://www.smspoll.net/js/embedsmspoll.js"></script>
+  </head>
+  <body>
+    <div id="begin" >
+      <p> Please wait for all of the polls to load.</p>
+      <p> Polls will each run for 
+      <input id="duration" value ="45"> </input>
+      seconds.
+      </p>
+      <button onclick="beginPolling()"> Begin Polling </button>
+    </div>
+    <h1 id="countdown"></h1>
+    <script type="text/javascript">
 
 //Make the links 
 var hashes = [ 
-  "34588Bl4IJ3hxycVYu6a",
-  "34521EP5TrkMWF4810he",
-  "34522vp2xf5RIZw01Eir",
-  "34523aLqDi74ujf3VU0s",
-  "34526mT34DenXAxv536J", //Hamlet or Hamilton
+  "34588Bl4IJ3hxycVYu6a", //Hamlet or Hamilton
+  "34521EP5TrkMWF4810he", // Cats or Dogs
+  "34522vp2xf5RIZw01Eir", //Call or Text
+  "34523aLqDi74ujf3VU0s", //Mountains or Beach
+  "34526mT34DenXAxv536J", //Boxers or Briefs
   "34589DVfc73Sc67vK9hn", //Batman
   "34590qdbRPPyVHAko97Q", //Aquaman or the flash?
   "345916Ya8GA4EPrPyLKK", //Intel or AMD?
@@ -32,41 +42,50 @@ function addPoll(hash) {
   var pollDiv = document.createElement("div");
   pollDiv.id = hash
   link = "http://www.smspoll.net/polls/charts/us_" + hash + ".swf";
-  document.body.append(pollDiv)
+  document.body.appendChild(pollDiv)
   swfobject.embedSWF(link, hash, "820", "450", "9.0.115",
     expressinstall, flashvars, params, attributes);
 }
 
+var hash = "flarg";
 var i = 0;
-function changePoll() {
+function changePoll(duration) {
   if (i < hashes.length) {
+    old = document.getElementById(hash);
+    if (old !== null) {
+      old.remove();
+    }
     hash = hashes[i]
     hideAllBut(hash)
     document.getElementById(hash).style.visibility = "visible";
-    countDownDate = new Date().getTime() + 31000;
+    countDownDate = new Date().getTime() + duration;
     i += 1;
-    setTimeout(changePoll, 1000 * 30);
+
+    changeClosure = function() {
+      var d = duration;
+      changePoll(d);
+    }
+    setTimeout(changeClosure, duration);
   }
 }
 
 function hideAllBut(selected) {
   hashes.forEach(function(hash) {
     poll = document.getElementById(hash);
-    if (selection === hash) {
+    if (poll !== null) {
       poll.style.visibility = "hidden";
-    } else {
-      poll.style.visibility = "visibile";
     }
   });
+  current = document.getElementById(selected);
+  current.style.visibility = "visible";
 }
 
 function beginPolling() {
-  b = document.getElementById("begin");
-  b.outerHTML="";
-  delete b;
-  changePoll();
+  duration = document.getElementById("duration").value;
+  document.getElementById("begin").remove();
+  changePoll(duration * 1000); // Milliseconds
   var x = setInterval(function() {
-  
+
     var now = new Date().getTime();
     var distance = countDownDate - now;
     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -77,4 +96,6 @@ function beginPolling() {
   }, 100);
 }
 hashes.forEach(addPoll)
-</script>
+    </script>
+  </body>
+</html>
